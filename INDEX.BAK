@@ -97,6 +97,8 @@ int isInvalidMove(int currentMove) {
 
 void checkWinner() {
 	//cout<<"Checking Winner..."<<endl;
+	// Seperate Moves for Player X and Player O
+	// Check for Pattern
 }
 
 void initCoordinates() {
