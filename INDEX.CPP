@@ -11,7 +11,9 @@ void drawBoard();
 void drawX(int);
 void drawO(int);
 int checkMoves(int);
-void checkWinner();
+int checkWinner();
+int isInvalidMove(int);
+int needleHaystack(int, int[]);
 
 int x0, x1, x2, x3;
 int y0, y1, y2, y3;
@@ -26,30 +28,18 @@ int main() {
 	initCoordinates();
 
 	int i=0;
-	// Keeping all moves at 0
 	for(i=0;i<9;i++) {
 		moves[i]=0;
 	}
 
-	/*
-	i=0;
-	do {
-		cout<<i++<<endl;
-		if(i==5) break;
-	}while(0);
-
-	for(i=0;i<9;i++) {
-
-	}
-	*/
-
+	// if(1) cout<<"valid"<<endl;
 	for(i=0;i<9;i++) {
 		if(i%2==0) {
 			// Player X
 			do {
 				cout<<"Player X ::";
 				cin>>moves[i];
-			} while(isInvalidMoves(i));
+			} while(isInvalidMove(i));
 			drawX(moves[i]);
 		} else {
 			// Player O
@@ -59,16 +49,13 @@ int main() {
 			} while(isInvalidMove(i));
 			drawO(moves[i]);
 		}
-
-		checkWinner();
+		if(checkWinner()) { i=10; break; }
 	}
 
-	cout<<endl;
-	cout<<"All the moves played."<<endl;
-	for(i=0;i<9;i++) {
-		cout<<"Moves "<<(i+1)<<"::"<<moves[i]<<endl;
+	// checkWinner();
+	if(i!=10) {
+		cout<<"Draw Game"<<endl;
 	}
-
 	// Pause Screen
 	char a;
 	cin>>a;
@@ -76,29 +63,132 @@ int main() {
 }
 
 int isInvalidMove(int currentMove) {
-	int valid=1;
 	if((moves[currentMove]<=0 || moves[currentMove]>=10)) {
 		cout<<"Invalid Move. Try again."<<endl;
-		valid=0;
-	} else {
-		cout<<"Valid number between 1 and 9."<<endl;
+		return 1;
 	}
-
 	for(int i=0;i<currentMove;i++) {
 		if(moves[currentMove]==moves[i]) {
 			cout<<"Move already made. Try again."<<endl;
-			valid=0;
-			break;
+			return 1;
 		}
 	}
-
-	return valid;
+	return 0;
 }
-			    f
-void checkWinner() {
-	//cout<<"Checking Winner..."<<endl;
+
+int checkWinner() {
 	// Seperate Moves for Player X and Player O
+	int i=0, j=0, movex[5], moveo[5];
+	for(i=0;i<5;i++) {
+		movex[i]=0;
+		moveo[i]=0;
+	}
+
+	for(i=0;i<9;i=i+2) {
+		movex[j]=moves[i];
+		j++;
+	}
+	j=0;
+	for(i=1;i<9;i=i+2) {
+		moveo[j]=moves[i];
+		j++;
+	}
+
+	//for(i=0;i<5;i++) {
+	// 	cout<<"X:"<<movex[i]<<endl;
+	//	cout<<"O:"<<moveo[i]<<endl;
+	//}
+
 	// Check for Pattern
+	// 123
+	if(needleHaystack(1, movex) && needleHaystack(2, movex) && needleHaystack(3, movex)) {
+		cout<<"Player X Wins"<<endl;
+		return 1;
+	}
+	if(needleHaystack(1, moveo) && needleHaystack(2, moveo) && needleHaystack(3, moveo)) {
+		cout<<"Player O Wins"<<endl;
+		return 1;
+	}
+
+	// 456
+	if(needleHaystack(4, movex) && needleHaystack(5, movex) && needleHaystack(6, movex)) {
+		cout<<"Player X Wins"<<endl;
+		return 1;
+	}
+	if(needleHaystack(4, moveo) && needleHaystack(5, moveo) && needleHaystack(6, moveo)) {
+		cout<<"Player O Wins"<<endl;
+		return 1;
+	}
+
+	// 789
+	if(needleHaystack(7, movex) && needleHaystack(8, movex) && needleHaystack(9, movex)) {
+		cout<<"Player X Wins"<<endl;
+		return 1;
+	}
+	if(needleHaystack(7, moveo) && needleHaystack(8, moveo) && needleHaystack(9, moveo)) {
+		cout<<"Player O Wins"<<endl;
+		return 1;
+	}
+
+	// 147
+	if(needleHaystack(1, movex) && needleHaystack(4, movex) && needleHaystack(7, movex)) {
+		cout<<"Player X Wins"<<endl;
+		return 1;
+	}
+	if(needleHaystack(1, moveo) && needleHaystack(4, moveo) && needleHaystack(7, moveo)) {
+		cout<<"Player O Wins"<<endl;
+		return 1;
+	}
+
+	// 258
+	if(needleHaystack(2, movex) && needleHaystack(5, movex) && needleHaystack(8, movex)) {
+		cout<<"Player X Wins"<<endl;
+		return 1;
+	}
+	if(needleHaystack(2, moveo) && needleHaystack(5, moveo) && needleHaystack(8, moveo)) {
+		cout<<"Player O Wins"<<endl;
+		return 1;
+	}
+
+	// 369
+	if(needleHaystack(3, movex) && needleHaystack(6, movex) && needleHaystack(9, movex)) {
+		cout<<"Player X Wins"<<endl;
+		return 1;
+	}
+	if(needleHaystack(3, moveo) && needleHaystack(6, moveo) && needleHaystack(9, moveo)) {
+		cout<<"Player O Wins"<<endl;
+		return 1;
+	}
+
+	// 159
+	if(needleHaystack(1, movex) && needleHaystack(5, movex) && needleHaystack(9, movex)) {
+		cout<<"Player X Wins"<<endl;
+		return 1;
+	}
+	if(needleHaystack(1, moveo) && needleHaystack(5, moveo) && needleHaystack(9, moveo)) {
+		cout<<"Player O Wins"<<endl;
+		return 1;
+	}
+
+	// 357
+	if(needleHaystack(7, movex) && needleHaystack(5, movex) && needleHaystack(3, movex)) {
+		cout<<"Player X Wins"<<endl;
+		return 1;
+	}
+	if(needleHaystack(7, moveo) && needleHaystack(5, moveo) && needleHaystack(3, moveo)) {
+		cout<<"Player O Wins"<<endl;
+		return 1;
+	}
+
+	return 0;
+}
+
+int needleHaystack(int needle, int haystack[]) {
+	int i=0;
+	for(i=0;i<5;i++) {
+		if(needle==haystack[i]) return 1;
+	}
+	return 0;
 }
 
 void initCoordinates() {
