@@ -135,7 +135,7 @@ class Move {
 private:
 	int moves[9], movex[5], moveo[5];
 public:
-	Move();
+	Move(); // Constructor
 	void getMoves(Board);
 	int isInvalidMove(int);
 	int checkWinner();
@@ -298,7 +298,7 @@ int main() {
 	Board board;
 	board.initCoordinates();
 	board.drawBoard();
-	board.initCoordinates();
+	// board.initCoordinates();
 
 	Move move;
 	move.getMoves(board);
